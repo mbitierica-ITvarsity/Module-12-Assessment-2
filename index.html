@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link rel="stylesheet" href="Sources/css/bootstrap.min.css">
+<link rel="stylesheet" href="Sources/css/custom.css">
+    <title>Contact Book</title>
+</head>
+<body onload="fetchContacts()">
+
+<header>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<a href="" class="navbar-brand">
+<img src="Sources/img/neon logo.jpg" width="100px" class="d-inline-block align-middle mr-2">
+<span class="text-uppercase font-weight-bold">Contact Book</span> 
+</a>
+<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar">
+    <span class="navbar-toggler-icon"></span>
+</button>
+
+<div class="collapse navbar-collapse" id="navbar">
+<div class="navbar-nav">
+<a href="index.html" class="nav-item nav-link">Home</a>
+<a href="add-contact.html" class="nav-item nav-link">Add Contact</a>
+
+</div>
+</div>
+</nav>
+</header>
+
+<div id="table">Contacts loading...</div>
+<button id="refresh" type="button"><img src="Sources/img/refresh icon.jpg" class="img-thumbnail rounded-circle" width="90"/></button>
+<button id="addContact" type="button"><img src="Sources/img/add icon.jpg" class="img-thumbnail rounded-circle" width="70"/></button>
+
+    <script src="config.js"></script>
+    <script>
+        document.getElementById("refresh").addEventListener('click', fetchContacts);
+        document.getElementById("addContact").addEventListener('click' ,addContact);
+        function fetchContacts(){
+            fetch(rootPath + "controller/get-contacts/")
+            .then(function(response){
+                return response.json();
+            })
+            .then(function(data){
+                displayOutput(data);
+                //console.log(data);
+            })
+        }
+
+        function displayOutput(data){
+            output = "<table>";
+
+            for(a in data){
+                output +=`
+                    <tr onclick="editContact(${data[a].id})">
+                        <td><img src="${rootPath}controller/uploads/${data[a].avatar}" width="40"/></td>
+                        <td><h5>${data[a].firstname}</h5></td>
+                        <td><h5>${data[a].lastname}</h5></td>        
+                    </tr>
+                `
+            }  
+            output += "</table>";
+            document.getElementById("table").innerHTML = output;
+        }
+
+        function addContact(){
+            window.open("add-contact.html","_self");
+        }
+
+        function editContact(id){
+            window.open("edit-contact.html?id=" + id, "_self");
+        }
+
+    </script>
+<div class="footer">
+<p>&copy; Erica Mbiti, Inc. &middot;<a href="#" >Privacy</a> &middot; <a href="#">Terms</a></p>
+</div>
+
+<script src="Sources/js/jquery-3.6.0.min.js"></script>
+<script src="Sources/js/bootstrap.bundle.min.js"></script>
+
+
+</body>
+</html>
